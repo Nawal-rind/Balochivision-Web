@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BalochiScribe · Balochi OCR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&family=Noto+Naskh+Arabic:wght@400;600&family=Noto+Nastaliq+Urdu:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="bg"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span><span class="grid"></span></div>
+
+<header class="top">
+  <div class="brand">
+    <div class="logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V5a1 1 0 0 1 1-1h2M17 4h2a1 1 0 0 1 1 1v2M20 17v2a1 1 0 0 1-1 1h-2M7 20H5a1 1 0 0 1-1-1v-2"/><path d="M8 12h8M8 8.5h8M8 15.5h5"/></svg>
+    </div>
+    <span>Balochi<b>Scribe</b></span>
+  </div>
+  <div class="top-right">
+    <div class="status" id="status" data-state="offline"><i></i><span id="statusText">Checking server…</span></div>
+    <button class="icon-btn" id="settingsBtn" title="API settings" aria-label="API settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+    </button>
+  </div>
+</header>
+
+<section class="hero">
+  <span class="chip">AI-powered · Fine-tuned Gemma 4 · Balochi script</span>
+  <h1>Turn Balochi images &amp; PDFs into <span class="grad">editable text</span></h1>
+  <p>Drop a screenshot or a PDF. BalochiScribe reads every page, right-to-left, and gives you text you can copy or download.</p>
+</section>
+
+<main class="grid-2">
+  <!-- UPLOAD -->
+  <section class="card" id="uploadCard">
+    <div class="card-head"><h2><span class="num">1</span> Upload</h2><span class="hint">PNG · JPG · WEBP · PDF · max 25 MB</span></div>
+
+    <label class="drop" id="drop" tabindex="0">
+      <input type="file" id="fileInput" accept="image/*,application/pdf" hidden>
+      <div class="drop-inner" id="dropInner">
+        <div class="drop-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M20 16v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3"/></svg>
+        </div>
+        <strong>Drag &amp; drop your file here</strong>
+        <span>or <u>browse</u> from your device</span>
+      </div>
+      <div class="preview" id="preview" hidden></div>
+    </label>
+
+    <div class="fileline" id="fileLine" hidden>
+      <div class="fname" id="fileName"></div>
+      <button class="link-btn" id="clearBtn">Remove</button>
+    </div>
+
+    <div class="actions">
+      <button class="btn primary" id="runBtn" disabled>
+        <span class="shine"></span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>
+        <span id="runLabel">Extract text</span>
+      </button>
+      <button class="btn ghost" id="cancelBtn" hidden>Cancel</button>
+    </div>
+
+    <div class="progress" id="progress" hidden>
+      <div class="p-top"><span id="pLabel">Starting…</span><span id="pTime">00:00</span></div>
+      <div class="bar" id="bar"><div class="fill" id="fill"></div></div>
+      <div class="p-note" id="pNote"></div>
+    </div>
+
+    <div class="alert" id="alert" hidden></div>
+  </section>
+
+  <!-- RESULT -->
+  <section class="card" id="resultCard">
+    <div class="card-head">
+      <h2><span class="num">2</span> Extracted text</h2>
+      <div class="tools">
+        <select id="fontSel" title="Font">
+          <option value="naskh">Naskh</option>
+          <option value="nastaliq">Nastaliq</option>
+        </select>
+        <button class="icon-btn sm" id="fMinus" title="Smaller text">A−</button>
+        <button class="icon-btn sm" id="fPlus" title="Larger text">A+</button>
+      </div>
+    </div>
+
+    <div class="result" id="result">
+      <div class="empty" id="empty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>
+        <p>Your text will appear here.</p>
+      </div>
+    </div>
+
+    <div class="actions wrap">
+      <button class="btn soft" id="copyBtn" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+        <span id="copyLabel">Copy</span>
+      </button>
+      <button class="btn soft" id="txtBtn" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>
+        TXT
+      </button>
+      <button class="btn soft accent" id="docxBtn" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>
+        <span id="docxLabel">DOCX</span>
+      </button>
+    </div>
+  </section>
+</main>
+
+<section class="note">
+  <h3>Good to know</h3>
+  <ul>
+    <li>Tested on only 30 test images; best on clean screenshots of Balochi text.</li>
+    <li>Tall pages are read in strips. Images from other sources may be less accurate, so always proofread.</li>
+    <li>The model runs on a GPU, so each page can take 1–2 minutes.</li>
+  </ul>
+</section>
+
+<footer>BalochiScribe · Built for the Balochi OCR competition</footer>
+
+<!-- SETTINGS MODAL -->
+<div class="modal" id="modal" hidden>
+  <div class="sheet">
+    <h3>API settings</h3>
+    <p>Paste the public URL of your BalochiScribe backend.</p>
+    <input id="apiInput" type="url" placeholder="https://your-api.trycloudflare.com" spellcheck="false" autocomplete="off">
+    <div class="actions">
+      <button class="btn primary" id="saveApi"><span class="shine"></span>Save &amp; test</button>
+      <button class="btn ghost" id="closeModal">Close</button>
+    </div>
+    <div class="alert" id="apiMsg" hidden></div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
