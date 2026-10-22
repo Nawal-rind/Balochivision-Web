@@ -1,0 +1,1 @@
+window.BS_API = "https://order-sections-postposted-notification.trycloudflare.com";

@@ -13,7 +13,7 @@ const el = {
   modal: $("modal"), apiInput: $("apiInput"), apiMsg: $("apiMsg"),
 };
 
-let apiBase = (localStorage.getItem("bs_api") || "").trim().replace(/\/+$/, "");
+let apiBase = (sessionStorage.getItem("bs_api") || window.BS_API || "").trim().replace(/\/+$/, "");
 let file = null, previewUrl = null, pages = [], total = 0;
 let controller = null, timer = null, startedAt = 0, running = false;
 let fontSize = 26;
@@ -289,7 +289,7 @@ $("saveApi").addEventListener("click", async () => {
   let v = el.apiInput.value.trim().replace(/\/+$/, "");
   if (v && !/^https?:\/\//i.test(v)) v = "https://" + v;
   apiBase = v;
-  localStorage.setItem("bs_api", apiBase);
+  sessionStorage.setItem("bs_api", apiBase);
   showAlert(el.apiMsg, "Testing…", true);
   const ok = await checkHealth();
   if (ok) showAlert(el.apiMsg, "Connected. The model is loaded and ready.", true);
