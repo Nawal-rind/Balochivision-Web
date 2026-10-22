@@ -1,7 +1,8 @@
 
 streamlit
 torch
-transformers>=5.0.0
+torchvision
+transformers>=5.5.0
 peft
 accelerate
 pillow
