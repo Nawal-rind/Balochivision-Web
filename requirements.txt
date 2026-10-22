@@ -7,3 +7,6 @@ peft
 accelerate
 pillow
 sentencepiece
+
+bitsandbytes>=0.46.1
+
